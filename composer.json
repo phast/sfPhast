@@ -1,0 +1,45 @@
+{
+    "config": {
+        "vendor-dir": "lib/vendor"
+    },
+	"repositories": [
+		{
+            "type": "package",
+            "package": {
+                "name": "symfony/symfony1",
+                "version": "1.4",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/symfony/symfony1",
+                    "reference": "1.4"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "henrikbjorn/sf-twig-plugin",
+                "type": "symfony1-plugin",
+                "version": "dev-master",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/henrikbjorn/sfTwigPlugin",
+                    "reference": "master"
+                }
+            }
+        }
+    ],
+    "name": "phast/sf-phast",
+    "type": "symfony cms",
+    "keywords": ["symfony", "phast", "ui", "cms"],
+	"minimum-stability": "dev",
+    "require": {
+		"php": ">=5.4.0",
+		"composer/installers": "*",
+		"symfony/symfony1": "1.4",
+		"twig/twig": "1.15.*@dev",
+		"propel/sf-propel-o-r-m-plugin": "1.5.*@dev",
+        "henrikbjorn/sf-twig-plugin": "dev-master",
+        "phast/sf-phast-plugin": "dev-master",
+    }
+}
