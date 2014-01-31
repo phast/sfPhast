@@ -30,7 +30,7 @@
         }
     ],
     "name": "phast/sf-phast",
-    "type": "symfony cms",
+    "type": "symfony-cms",
     "keywords": ["symfony", "phast", "ui", "cms"],
 	"minimum-stability": "dev",
     "require": {
