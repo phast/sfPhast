@@ -11,3 +11,5 @@
 /config/databases.yml
 /*.bat
 thumbs.db
+
+!/data/fixtures/fixtures.yml
