@@ -6,7 +6,6 @@
 /log/
 /data/
 /plugins/
-/symfony
 /composer.lock
 /config/databases.yml
 /web/generated/
