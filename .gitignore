@@ -9,7 +9,11 @@
 /symfony
 /composer.lock
 /config/databases.yml
+/web/generated/
+/web/sfPhastPlugin
+/web/sfPropelORMPlugin
 /*.bat
+/*.sh
 thumbs.db
 
 !/data/fixtures/fixtures.yml
