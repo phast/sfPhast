@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        {{ phast_ui_asset() }}
+
+        {{ include_http_metas() }}
+        {{ include_metas() }}
+        {{ include_title() }}
+        {{ include_stylesheets() }}
+
+        <link rel="shortcut icon" href="/favicon.ico">
+
+        {{ include_javascripts() }}
+
+        {{ phast_ui_render() }}
+
+    </head>
+    <body>
+        {{ sf_content }}
+    </body>
+</html>
