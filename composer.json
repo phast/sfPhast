@@ -27,5 +27,13 @@
 		"twig/twig": "1.15.*@dev",
 		"propel/sf-propel-o-r-m-plugin": "1.5.*@dev",
         "phast/sf-phast-plugin": "dev-master"
+    },
+	"scripts": {
+        "post-install-cmd": [
+            "php symfony plugin:publish-assets"
+        ],
+		"post-update-cmd": [
+            "php symfony plugin:publish-assets"
+        ],
     }
 }
