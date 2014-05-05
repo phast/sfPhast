@@ -1,7 +1,7 @@
 /.idea/
 /lib/model/om/
 /lib/model/map/
-/lib/venor/
+/lib/vendor/
 /cache/
 /log/
 /data/
