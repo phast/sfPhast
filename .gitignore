@@ -6,6 +6,7 @@
 /log/
 /data/
 /plugins/
+/composer.phar
 /composer.lock
 /config/databases.yml
 /web/generated/
