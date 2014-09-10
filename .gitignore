@@ -10,8 +10,8 @@
 /composer.lock
 /config/databases.yml
 /web/generated/
-/web/sfPhastPlugin/
-/web/sfPropelORMPlugin/
+/web/sfPhastPlugin
+/web/sfPropelORMPlugin
 /*.bat
 /*.sh
 thumbs.db
