@@ -14,6 +14,19 @@
                     "reference": "1.4"
                 }
             }
+        },
+		{
+            "type": "package",
+            "package": {
+                "name": "symfony/sfImageTransformPlugin",
+                "type": "symfony1-plugin",
+                "version": "1.4",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/Symfony-Plugins/sfImageTransformPlugin",
+                    "reference": "master"
+                }
+            }
         }
     ],
     "name": "phast/sf-phast",
@@ -24,6 +37,7 @@
 		"php": ">=5.4.0",
 		"composer/installers": "*",
 		"symfony/symfony1": "1.4",
+		"symfony/sfImageTransformPlugin": "1.4",
 		"twig/twig": "1.15.*@dev",
 		"propel/sf-propel-o-r-m-plugin": "1.5.*@dev",
         "phast/sf-phast-plugin": "dev-master"
