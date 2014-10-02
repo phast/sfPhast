@@ -16,6 +16,6 @@ class ProjectConfiguration extends sfProjectConfiguration
         sfConfig::set('sf_twig_lib_dir', sfConfig::get('sf_lib_dir') . '/vendor/twig/twig/lib');
         sfConfig::set('sf_phing_path', sfConfig::get('sf_lib_dir') . '/vendor/phing/phing');
 
-        $this->enablePlugins('sfPropelORMPlugin', 'sfPhastPlugin');
+        $this->enablePlugins('sfPropelORMPlugin', 'sfPhastPlugin', 'sfImageTransformPlugin');
     }
 }
