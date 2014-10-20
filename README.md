@@ -13,7 +13,7 @@ Symfony (1.4) CMS
 Create project via composer
 
 ``` bash
-composer.phar -sdev create-project phast/sf-phast project.dev
+composer.phar create-project -sdev phast/sf-phast project.dev
 ```
 
 Configure project
