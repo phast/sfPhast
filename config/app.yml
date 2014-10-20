@@ -5,3 +5,5 @@ all:
   mailing:
     from: 'Project <noreply@project.dev>'
     queue: 100
+
+  host: project.dev
