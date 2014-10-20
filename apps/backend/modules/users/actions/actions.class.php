@@ -517,8 +517,8 @@ class usersActions extends sfActions
 			'
         );
         $editor->setReceive(function($request, $response, $item){
-            $response->select('assign_mode', UserGroupSectionPeer::getAssignModeList());
-            $response->select('assign_auto', UserGroupSectionPeer::getAssignAutoList());
+            $response->select('assign_mode', PhastUserGroupSectionPeer::getAssignModeList());
+            $response->select('assign_auto', PhastUserGroupSectionPeer::getAssignAutoList());
         });
 
 		/**
