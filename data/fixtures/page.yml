@@ -1,0 +1,10 @@
+Page:
+  index:
+    uri: /
+    path: /
+    level: 0
+    route_options: "action: index"
+    position: 0
+    visible: 1
+    title: "Main page"
+    content: "<p>Phast CMS successfully installed</p>"
