@@ -22,30 +22,30 @@ UserCredential:
     name: cp_access
     title: Доступ в панель управления
     position: 0
-  сp_pages:
+  cp_pages:
     section_id: credential_section_admin
     name: cp_pages
     title: Управление страницами
     position: 1
-  сp_mailing:
+  cp_mailing:
     section_id: credential_section_admin
-    name: сp_mailing
+    name: cp_mailing
     title: Управление рассылками
     position: 2
-  сp_settings:
+  cp_settings:
     section_id: credential_section_admin
-    name: сp_settings
+    name: cp_settings
     title: Управление настройками
     position: 3
-  сp_users:
+  cp_users:
     section_id: credential_section_admin
-    name: сp_users
+    name: cp_users
     title: Управление пользователями
     position: 4
 
 UserCredentialRel:
   - {group_id: group_admin, credential_id: cp_access}
-  - {group_id: group_admin, credential_id: сp_pages}
-  - {group_id: group_admin, credential_id: сp_mailing}
-  - {group_id: group_admin, credential_id: сp_settings}
-  - {group_id: group_admin, credential_id: сp_users}
+  - {group_id: group_admin, credential_id: cp_pages}
+  - {group_id: group_admin, credential_id: cp_mailing}
+  - {group_id: group_admin, credential_id: cp_settings}
+  - {group_id: group_admin, credential_id: cp_users}
