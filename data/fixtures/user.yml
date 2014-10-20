@@ -37,15 +37,21 @@ UserCredential:
     name: cp_settings
     title: Управление настройками
     position: 3
+  cp_settings_constructor:
+    section_id: credential_section_admin
+    name: cp_settings_constructor
+    title: Управление конструктором настроек
+    position: 4
   cp_users:
     section_id: credential_section_admin
     name: cp_users
     title: Управление пользователями
-    position: 4
+    position: 5
 
 UserCredentialRel:
   - {group_id: group_admin, credential_id: cp_access}
   - {group_id: group_admin, credential_id: cp_pages}
   - {group_id: group_admin, credential_id: cp_mailing}
   - {group_id: group_admin, credential_id: cp_settings}
+  - {group_id: group_admin, credential_id: cp_settings_constructor}
   - {group_id: group_admin, credential_id: cp_users}
