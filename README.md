@@ -1,6 +1,6 @@
-# sfPhast #
+# Phast #
 
-Symfony 1 CMS
+Symfony (1.4) CMS
 
 ## Requirements ##
 
