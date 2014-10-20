@@ -16,4 +16,4 @@
 /*.sh
 thumbs.db
 
-!/data/fixtures/fixtures.yml
+!/data/fixtures/*.yml
