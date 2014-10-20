@@ -1,0 +1,290 @@
+propel:
+  _attributes:
+    package: lib.model
+    defaultIdMethod: native
+  file:
+    _attributes: { phpName: File, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    title: { phpName: Title, type: LONGVARCHAR, required: true }
+    content: { phpName: Content, type: LONGVARCHAR, required: true }
+    path: { phpName: Path, type: LONGVARCHAR, required: true }
+    filename: { phpName: Filename, type: LONGVARCHAR, required: true }
+    extension: { phpName: Extension, type: LONGVARCHAR, required: true }
+    size: { phpName: Size, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+    created_at: { phpName: CreatedAt, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+  gallery:
+    _attributes: { phpName: Gallery, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    title: { phpName: Title, type: LONGVARCHAR, required: true }
+    content: { phpName: Content, type: LONGVARCHAR, required: true }
+  gallery_rel:
+    _attributes: { phpName: GalleryRel, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    gallery_id: { phpName: GalleryId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: gallery, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    image_id: { phpName: ImageId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: image, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    title: { phpName: Title, type: LONGVARCHAR, required: true }
+    position: { phpName: Position, type: INTEGER, required: true }
+    visible: { phpName: Visible, type: BOOLEAN, size: '1', sqlType: 'tinyint(1) unsigned', required: true, defaultValue: true }
+    _indexes: { photo_rel_idx1_new_new: [position], photo_rel_idx2_new_new: [visible], photo_id_new_new: [gallery_id], image_id_new_new: [image_id] }
+  holder:
+    _attributes: { phpName: Holder, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    completed: { phpName: Completed, type: BOOLEAN, size: '1', sqlType: 'tinyint(1) unsigned', required: true, defaultValue: false }
+    created_at: { phpName: CreatedAt, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+    page_id: { phpName: PageId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: page, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    _indexes: { page_id_new: [page_id] }
+  image:
+    _attributes: { phpName: Image, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    gallery_id: { phpName: GalleryId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: gallery, foreignReference: id, onDelete: 'SET NULL', onUpdate: CASCADE }
+    title: { phpName: Title, type: LONGVARCHAR, required: true }
+    content: { phpName: Content, type: LONGVARCHAR, required: true }
+    mime: { phpName: Mime, type: LONGVARCHAR, required: true }
+    path: { phpName: Path, type: LONGVARCHAR, required: true }
+    filename: { phpName: Filename, type: LONGVARCHAR, required: true }
+    original_filename: { phpName: OriginalFilename, type: LONGVARCHAR, required: true }
+    position: { phpName: Position, type: INTEGER, required: true }
+    width: { phpName: Width, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+    height: { phpName: Height, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+    fullsize: { phpName: Fullsize, type: BOOLEAN, size: '1', sqlType: 'tinyint(1) unsigned', required: true }
+    updated_at: { phpName: UpdatedAt, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+    created_at: { phpName: CreatedAt, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+    _indexes: { gallery_id: [gallery_id] }
+  mailing_broadcast:
+    _attributes: { phpName: MailingBroadcast, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    title: { phpName: Title, type: LONGVARCHAR, required: true }
+    content: { phpName: Content, type: LONGVARCHAR, required: true }
+    status: { phpName: Status, type: TINYINT, size: '3', sqlType: 'tinyint(3) unsigned', required: true, defaultValue: '0' }
+    started_at: { phpName: StartedAt, type: TIMESTAMP, required: true }
+    created_at: { phpName: CreatedAt, type: TIMESTAMP, required: true }
+    updated_at: { phpName: UpdatedAt, type: TIMESTAMP, required: true }
+  mailing_broadcast_rel:
+    _attributes: { phpName: MailingBroadcastRel, idMethod: native }
+    channel_id: { phpName: ChannelId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: mailing_channel, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    broadcast_id: { phpName: BroadcastId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: mailing_broadcast, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    _indexes: { channel_id: [channel_id], broadcast_id: [broadcast_id] }
+  mailing_channel:
+    _attributes: { phpName: MailingChannel, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    title: { phpName: Title, type: LONGVARCHAR, required: true }
+    name: { phpName: Name, type: VARCHAR, size: '20', required: true }
+    _indexes: { mail_channel_idx1: [name] }
+  mailing_message:
+    _attributes: { phpName: MailingMessage, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    mode: { phpName: Mode, type: TINYINT, size: '3', sqlType: 'tinyint(3) unsigned', required: true }
+    priority: { phpName: Priority, type: TINYINT, size: '3', sqlType: 'tinyint(3) unsigned', required: true }
+    from: { phpName: From, type: LONGVARCHAR, required: true }
+    to: { phpName: To, type: LONGVARCHAR, required: true }
+    subject: { phpName: Subject, type: LONGVARCHAR, required: true }
+    body: { phpName: Body, type: LONGVARCHAR, required: true }
+    status: { phpName: Status, type: TINYINT, size: '3', sqlType: 'tinyint(3) unsigned', required: true, defaultValue: '0' }
+    status_message: { phpName: StatusMessage, type: LONGVARCHAR, required: true }
+    created_at: { phpName: CreatedAt, type: INTEGER, size: '10', required: true }
+    updated_at: { phpName: UpdatedAt, type: INTEGER, size: '10', required: true }
+    _indexes: { mailing_message_idx1: [priority], mailing_message_idx2: [status] }
+  mailing_schedule:
+    _attributes: { phpName: MailingSchedule, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    title: { phpName: Title, type: VARCHAR, size: '100', required: true }
+    composer: { phpName: Composer, type: LONGVARCHAR, required: true }
+    timetable: { phpName: Timetable, type: LONGVARCHAR, required: true }
+  mailing_schedule_rel:
+    _attributes: { phpName: MailingScheduleRel, idMethod: native }
+    channel_id: { phpName: ChannelId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: mailing_channel, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    schedule_id: { phpName: ScheduleId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: mailing_schedule, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    _indexes: { channel_id: [channel_id], schedule_id: [schedule_id] }
+  mailing_subscriber:
+    _attributes: { phpName: MailingSubscriber, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    user_id: { phpName: UserId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: user, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    title: { phpName: Title, type: LONGVARCHAR, required: true }
+    email: { phpName: Email, type: LONGVARCHAR, required: true }
+    created_at: { phpName: CreatedAt, type: TIMESTAMP, required: true }
+    updated_at: { phpName: UpdatedAt, type: TIMESTAMP, required: true }
+    _indexes: { user_id: [user_id] }
+  mailing_subscriber_rel:
+    _attributes: { phpName: MailingSubscriberRel, idMethod: native }
+    channel_id: { phpName: ChannelId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: mailing_channel, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    subscriber_id: { phpName: SubscriberId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: mailing_subscriber, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    _indexes: { channel_id: [channel_id], subscriber_id: [subscriber_id] }
+  mailing_task:
+    _attributes: { phpName: MailingTask, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    schedule_id: { phpName: ScheduleId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: mailing_schedule, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    status: { phpName: Status, type: TINYINT, size: '3', sqlType: 'tinyint(3) unsigned', required: true }
+    status_message: { phpName: StatusMessage, type: LONGVARCHAR, required: true }
+    started_at: { phpName: StartedAt, type: TIMESTAMP, required: true }
+    created_at: { phpName: CreatedAt, type: TIMESTAMP, required: true }
+    updated_at: { phpName: UpdatedAt, type: TIMESTAMP, required: true }
+    _indexes: { mailing_task_idx1: [status], schedule_id: [schedule_id] }
+  page:
+    _attributes: { phpName: Page, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    parent_id: { phpName: ParentId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: page, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    uri: { phpName: Uri, type: LONGVARCHAR, required: true }
+    path: { phpName: Path, type: LONGVARCHAR, required: true }
+    level: { phpName: Level, type: TINYINT, size: '3', sqlType: 'tinyint(3) unsigned', required: true }
+    route_pattern: { phpName: RoutePattern, type: LONGVARCHAR, required: true }
+    route_options: { phpName: RouteOptions, type: LONGVARCHAR, required: true }
+    route_requirements: { phpName: RouteRequirements, type: LONGVARCHAR, required: true }
+    route_priority: { phpName: RoutePriority, type: TINYINT, required: true, defaultValue: '0' }
+    position: { phpName: Position, type: INTEGER, required: true }
+    visible: { phpName: Visible, type: BOOLEAN, size: '1', sqlType: 'tinyint(1) unsigned', required: true, defaultValue: true }
+    system: { phpName: System, type: BOOLEAN, size: '1', sqlType: 'tinyint(1) unsigned', required: true, defaultValue: false }
+    title: { phpName: Title, type: LONGVARCHAR, required: true }
+    content: { phpName: Content, type: LONGVARCHAR, required: true }
+    seo_title: { phpName: SeoTitle, type: LONGVARCHAR, required: true }
+    seo_description: { phpName: SeoDescription, type: LONGVARCHAR, required: true }
+    seo_keywords: { phpName: SeoKeywords, type: LONGVARCHAR, required: true }
+    _indexes: { parent_id_new: [parent_id] }
+  setting:
+    _attributes: { phpName: Setting, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    section_id: { phpName: SectionId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: setting_section, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    key: { phpName: Key, type: VARCHAR, size: '255', required: true }
+    title: { phpName: Title, type: VARCHAR, size: '255', required: true }
+    position: { phpName: Position, type: INTEGER, size: '10', required: true }
+    visible: { phpName: Visible, type: BOOLEAN, size: '1', sqlType: 'tinyint(1) unsigned', required: true, defaultValue: true }
+    _indexes: { visible: [visible], position: [position], section_id: [section_id], key: [key] }
+  setting_field:
+    _attributes: { phpName: SettingField, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    setting_id: { phpName: SettingId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: setting, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    type_id: { phpName: TypeId, type: INTEGER, size: '3', sqlType: 'int(3) unsigned', required: true }
+    title: { phpName: Title, type: LONGVARCHAR, required: true }
+    key: { phpName: Key, type: VARCHAR, size: '255', required: true }
+    position: { phpName: Position, type: INTEGER, required: true }
+    visible: { phpName: Visible, type: BOOLEAN, size: '1', sqlType: 'tinyint(1) unsigned', required: true, defaultValue: true }
+    _indexes: { setting_id: [setting_id], position: [position], visible: [visible], type_id: [type_id] }
+  setting_option:
+    _attributes: { phpName: SettingOption, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    field_id: { phpName: FieldId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: setting_field, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    title: { phpName: Title, type: LONGVARCHAR, required: true }
+    position: { phpName: Position, type: INTEGER, required: true }
+    _indexes: { field_id: [field_id], position: [position] }
+  setting_result:
+    _attributes: { phpName: SettingResult, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    setting_id: { phpName: SettingId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: setting, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    _indexes: { setting_id: [setting_id] }
+  setting_section:
+    _attributes: { phpName: SettingSection, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    section_id: { phpName: SectionId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: setting_section, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    title: { phpName: Title, type: LONGVARCHAR, required: true }
+    position: { phpName: Position, type: INTEGER, required: true }
+    visible: { phpName: Visible, type: BOOLEAN, size: '1', sqlType: 'tinyint(1) unsigned', required: true, defaultValue: true }
+    _indexes: { visible: [visible], position: [position], section_id: [section_id] }
+  setting_value:
+    _attributes: { phpName: SettingValue, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    result_id: { phpName: ResultId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+    field_id: { phpName: FieldId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: setting_field, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    option_id: { phpName: OptionId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: setting_option, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    text: { phpName: Text, type: LONGVARCHAR, required: true }
+    _indexes: { field_id: [field_id], option_id: [option_id] }
+  user:
+    _attributes: { phpName: User, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    name: { phpName: Name, type: LONGVARCHAR, required: true }
+    created_at: { phpName: CreatedAt, type: TIMESTAMP, required: true }
+  user_credential:
+    _attributes: { phpName: UserCredential, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    section_id: { phpName: SectionId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: user_credential_section, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    name: { phpName: Name, type: VARCHAR, size: '50', required: true }
+    title: { phpName: Title, type: VARCHAR, size: '50', required: true }
+    position: { phpName: Position, type: INTEGER, required: true }
+    _indexes: { user_credential_idx1: [position], section_id: [section_id] }
+    _uniques: { name: [name] }
+  user_credential_rel:
+    _attributes: { phpName: UserCredentialRel, idMethod: native }
+    group_id: { phpName: GroupId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: user_group, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    credential_id: { phpName: CredentialId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: user_credential, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    _indexes: { group_id: [group_id], credential_id: [credential_id] }
+  user_credential_section:
+    _attributes: { phpName: UserCredentialSection, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    title: { phpName: Title, type: VARCHAR, size: '50', required: true }
+    position: { phpName: Position, type: INTEGER, required: true }
+    _indexes: { user_credential_section_idx1: [position] }
+  user_group:
+    _attributes: { phpName: UserGroup, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    section_id: { phpName: SectionId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: user_group_section, foreignReference: id, onDelete: 'SET NULL', onUpdate: CASCADE }
+    name: { phpName: Name, type: VARCHAR, size: '25', required: true }
+    title: { phpName: Title, type: VARCHAR, size: '50', required: true }
+    condition: { phpName: Condition, type: LONGVARCHAR, required: true }
+    position: { phpName: Position, type: INTEGER, required: true }
+    _indexes: { user_group_idx1: [position], section_id: [section_id] }
+    _uniques: { name: [name] }
+  user_group_assign:
+    _attributes: { phpName: UserGroupAssign, idMethod: native }
+    user_id: { phpName: UserId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: user, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    section_id: { phpName: SectionId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: user_group_section, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    assigned_at: { phpName: AssignedAt, type: TIMESTAMP, required: true }
+    _indexes: { section_id: [section_id] }
+  user_group_rel:
+    _attributes: { phpName: UserGroupRel, idMethod: native }
+    user_id: { phpName: UserId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: user, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    group_id: { phpName: GroupId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, required: true, foreignTable: user_group, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    _indexes: { group_id: [group_id] }
+  user_group_section:
+    _attributes: { phpName: UserGroupSection, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    title: { phpName: Title, type: LONGVARCHAR, required: true }
+    name: { phpName: Name, type: VARCHAR, size: '10', required: true }
+    position: { phpName: Position, type: INTEGER, required: true }
+    assign_auto: { phpName: AssignAuto, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+    assign_mode: { phpName: AssignMode, type: TINYINT, size: '3', sqlType: 'tinyint(3) unsigned', required: true }
+  user_session:
+    _attributes: { phpName: UserSession, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    user_id: { phpName: UserId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: user, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    sign_id: { phpName: SignId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: user_sign, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    hash: { phpName: Hash, type: VARCHAR, size: '64', required: true }
+    created_at: { phpName: CreatedAt, type: TIMESTAMP, required: true, defaultValue: '0000-00-00 00:00:00' }
+    updated_at: { phpName: UpdatedAt, type: TIMESTAMP, required: true, defaultValue: '0000-00-00 00:00:00' }
+    _indexes: { user_id: [user_id], sign_id: [sign_id] }
+  user_sign:
+    _attributes: { phpName: UserSign, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    provider_id: { phpName: ProviderId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: user_sign_provider, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    user_id: { phpName: UserId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: user, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    key: { phpName: Key, type: VARCHAR, size: '64', required: true }
+    password: { phpName: Password, type: LONGVARCHAR, required: true }
+    salt: { phpName: Salt, type: VARCHAR, size: '64', required: true }
+    visible: { phpName: Visible, type: BOOLEAN, size: '1', sqlType: 'tinyint(1) unsigned', required: true, defaultValue: true }
+    created_at: { phpName: CreatedAt, type: TIMESTAMP, required: true, defaultValue: '0000-00-00 00:00:00' }
+    updated_at: { phpName: UpdatedAt, type: TIMESTAMP, required: true, defaultValue: '0000-00-00 00:00:00' }
+    _indexes: { user_id: [user_id], provider_id: [provider_id] }
+  user_sign_provider:
+    _attributes: { phpName: UserSignProvider, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    key: { phpName: Key, type: VARCHAR, size: '10', required: true }
+    title: { phpName: Title, type: LONGVARCHAR, required: true }
+    position: { phpName: Position, type: INTEGER, required: true }
+    visible: { phpName: Visible, type: BOOLEAN, size: '1', sqlType: 'tinyint(1) unsigned', required: true, defaultValue: true }
+    _indexes: { user_sign_provider_idx1: [key], user_sign_provider_idx2: [position], user_sign_provider_idx3: [visible] }
+  video:
+    _attributes: { phpName: Video, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    title: { phpName: Title, type: LONGVARCHAR, required: true }
+    url: { phpName: Url, type: LONGVARCHAR, required: true }
+    width: { phpName: Width, type: SMALLINT, size: '5', sqlType: 'smallint(5) unsigned', required: true }
+    height: { phpName: Height, type: SMALLINT, size: '5', sqlType: 'smallint(5) unsigned', required: true }
+    autoplay: { phpName: Autoplay, type: BOOLEAN, size: '1', sqlType: 'tinyint(1) unsigned', required: true }
+    created_at: { phpName: CreatedAt, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+  widget:
+    _attributes: { phpName: Widget, idMethod: native }
+    id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
+    holder_id: { phpName: HolderId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: holder, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    image_id: { phpName: ImageId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: image, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    gallery_id: { phpName: GalleryId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: gallery, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    video_id: { phpName: VideoId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: video, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    file_id: { phpName: FileId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: file, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    position: { phpName: Position, type: INTEGER, sqlType: 'int(11) unsigned', required: false, defaultValue: '0' }
+    _indexes: { holder_id_new_new: [holder_id], image_id_new_new: [image_id], file_id_new_new: [file_id], gallery_id_new: [gallery_id], video_id: [video_id] }

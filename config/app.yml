@@ -1,0 +1,7 @@
+all:
+  url:
+    index: /
+
+  mailing:
+    from: 'Project <noreply@project.dev>'
+    queue: 100

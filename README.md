@@ -10,6 +10,16 @@ Symfony (1.4) CMS
 
 ## Installation ##
 
+Create project via composer
+
 ``` bash
-composer.phar -sdev create-project phast/sf-phast project.name
+composer.phar -sdev create-project phast/sf-phast project.dev
 ```
+
+Configure project
+
+``` bash
+cd project.dev
+php symfony phast:install
+```
+
