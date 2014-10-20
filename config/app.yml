@@ -3,7 +3,7 @@ all:
     index: /
 
   mailing:
-    from: 'Project <noreply@project.dev>'
+    from: 'Project Name <noreply@project.dev>'
     queue: 100
 
   host: project.dev
