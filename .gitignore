@@ -1,4 +1,10 @@
 /.idea/
+/*.sublime-project
+/*.sublime-workspace
+thumbs.db
+
+/node_modules/
+/bower_components/
 /lib/model/om/
 /lib/model/map/
 /lib/vendor/
@@ -10,10 +16,13 @@
 /composer.lock
 /config/databases.yml
 /web/generated/
-/web/sfPhastPlugin
-/web/sfPropelORMPlugin
+/web/sf*Plugin
+/web/js/
+/web/css/
+/web/images/
+/web/fonts/
+/source/etc/*.styl
 /*.bat
 /*.sh
-thumbs.db
 
-!/data/fixtures/*.yml
+!/data/fixtures/fixtures.yml
