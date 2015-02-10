@@ -27,11 +27,6 @@ UserCredential:
     name: cp_pages
     title: Управление страницами
     position: 1
-  cp_mailing:
-    section_id: credential_section_admin
-    name: cp_mailing
-    title: Управление рассылками
-    position: 2
   cp_settings:
     section_id: credential_section_admin
     name: cp_settings
@@ -51,7 +46,6 @@ UserCredential:
 UserCredentialRel:
   - {group_id: group_admin, credential_id: cp_access}
   - {group_id: group_admin, credential_id: cp_pages}
-  - {group_id: group_admin, credential_id: cp_mailing}
   - {group_id: group_admin, credential_id: cp_settings}
   - {group_id: group_admin, credential_id: cp_settings_constructor}
   - {group_id: group_admin, credential_id: cp_users}

@@ -10,6 +10,8 @@ var gulp = require('gulp'),
     twig = require('gulp-twig'),
     browserSync,
     nib = require('nib'),
+    merge = require('merge-stream'),
+    path = require('path'),
     fs = require('fs');
 
 gulp.task('templates', function() {
@@ -71,9 +73,25 @@ gulp.task('stylus-sprite-build', function() {
 });
 
 gulp.task('js', function() {
-    gulp.src('./source/js/**/*.js')
-        .pipe(concat('common.js'))
-        .pipe(gulp.dest('./web/js'));
+    var dir = './source/js',
+        dest = './web/js';
+
+    stream = merge(
+        fs
+            .readdirSync(dir)
+            .filter(function(file){return fs.statSync(path.join(dir, file)).isDirectory();})
+            .map(function(folder) {
+                return gulp.src(path.join(dir, folder, '/*.js'))
+                    .pipe(concat(folder + '.js'))
+                    .pipe(gulp.dest(dest))
+            }),
+        gulp.src(dir + '/*.js').pipe(concat('common.js')).pipe(gulp.dest(dest))
+    );
+
+    if(browserSync)
+        stream.pipe(browserSync.reload({stream: true}));
+
+    return stream;
 });
 
 gulp.task('css', function() {
