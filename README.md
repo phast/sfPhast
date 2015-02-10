@@ -6,6 +6,9 @@ Symfony (1.4) CMS
 
 * PHP 5.4+
 * [**Composer**](https://github.com/composer/composer)
+* [**Node.js**](http://nodejs.org/)
+* [**Gulp**](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md)
+* [**Bower**](http://bower.io/)
 
 
 ## Installation ##
@@ -21,5 +24,17 @@ Configure project
 ``` bash
 cd project.dev
 php symfony phast:install
+```
+
+Install NPM modules
+
+``` bash
+npm install
+```
+
+Install Bower components
+
+``` bash
+bower install
 ```
 
