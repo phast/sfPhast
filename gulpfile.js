@@ -140,7 +140,7 @@ gulp.task('watch', function(){
 });
 
 gulp.task('sync', function(){
-    browserSync({proxy: 'eliseevs.dev', open: false});
+    browserSync({proxy: 'localhost', open: false});
 });
 
 
