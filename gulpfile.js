@@ -10,7 +10,8 @@ var gulp = require('gulp'),
     twig = require('gulp-twig'),
     browserSync,
     nib = require('nib'),
-    merge = require('merge-stream'),
+    phast = require('stylus-phast'),
+    merge = require('gulp-merge'),
     path = require('path'),
     fs = require('fs');
 
@@ -24,22 +25,32 @@ gulp.task('templates', function() {
 
     if(browserSync)
         stream.pipe(browserSync.reload({stream: true}));
+		
+	return stream;
 });
 
-gulp.task('bower-files', function(){
-    return gulp.src(bower({includeDev: true}))
+gulp.task('bower-scripts', function(){
+    return gulp.src(bower({
+            includeDev: true,
+            filter: function (path) {
+                var ext = path.split('\\').pop().split('.').pop();
+                if (ext == 'js') return true;
+            }
+        }))
         .pipe(concat('vendor.js'))
         .pipe(gulp.dest('./web/js'));
 });
 
 gulp.task('stylus', function() {
     var stream = gulp.src('./source/stylus/*.styl')
-        .pipe(stylus({use: nib()}))
+        .pipe(stylus({use: phast()}))
         .on('error', console.log)
         .pipe(gulp.dest('./web/css'));
 
     if(browserSync)
         stream.pipe(browserSync.reload({stream: true}));
+		
+	return stream;
 });
 
 gulp.task('stylus-sprite', function() {
@@ -64,7 +75,7 @@ gulp.task('stylus-sprite', function() {
         }
     }));
     data.img.pipe(gulp.dest('./web/images'));
-    data.css.pipe(gulp.dest('./source/etc'));
+    return data.css.pipe(gulp.dest('./source/etc'));
 });
 
 gulp.task('stylus-sprite-build', function() {
@@ -76,17 +87,16 @@ gulp.task('js', function() {
     var dir = './source/js',
         dest = './web/js';
 
-    stream = merge(
-        fs
-            .readdirSync(dir)
-            .filter(function(file){return fs.statSync(path.join(dir, file)).isDirectory();})
-            .map(function(folder) {
-                return gulp.src(path.join(dir, folder, '/*.js'))
-                    .pipe(concat(folder + '.js'))
-                    .pipe(gulp.dest(dest))
-            }),
-        gulp.src(dir + '/*.js').pipe(concat('common.js')).pipe(gulp.dest(dest))
-    );
+    var stream = fs
+        .readdirSync(dir)
+        .filter(function(file){return fs.statSync(path.join(dir, file)).isDirectory();})
+        .map(function(folder) {
+            return gulp.src(path.join(dir, folder, '/*.js'))
+                .pipe(concat(folder + '.js'))
+                .pipe(gulp.dest(dest))
+    });
+
+    stream = merge(stream, gulp.src(dir + '/*.js').pipe(concat('common.js')).pipe(gulp.dest(dest)));
 
     if(browserSync)
         stream.pipe(browserSync.reload({stream: true}));
@@ -95,15 +105,26 @@ gulp.task('js', function() {
 });
 
 gulp.task('css', function() {
-    gulp.src('./source/css/**/*.css').pipe(concat('vendor.css')).pipe(gulp.dest('./web/css'));
+    var merged = merge(gulp.src('./source/css/**/*.css'), gulp.src(
+        bower({
+            includeDev: true,
+            filter: function (path) {
+                var ext = path.split('\\').pop().split('.').pop();
+                if (ext == 'css') return true;
+            }
+        })
+    ));
+    merged.pipe(concat('vendor.css')).pipe(gulp.dest('./web/css'));
+
+    return merged;
 });
 
 gulp.task('fonts', function() {
-    gulp.src('./source/fonts/**/*').pipe(gulp.dest('./web/fonts'));
+    return gulp.src('./source/fonts/**/*').pipe(gulp.dest('./web/fonts'));
 });
 
 gulp.task('images', function() {
-    gulp.src('./source/images/**/*').pipe(gulp.dest('./web/images'));
+    return gulp.src('./source/images/**/*').pipe(gulp.dest('./web/images'));
 });
 
 
@@ -119,7 +140,7 @@ gulp.task('watch', function(){
 });
 
 gulp.task('sync', function(){
-    browserSync({proxy: 'localhost', open: false});
+    browserSync({proxy: 'eliseevs.dev', open: false});
 });
 
 
@@ -127,9 +148,10 @@ gulp.task('default', function() {
     browserSync = require('browser-sync');
 
     runSequence(
-        ['bower-files', 'sync', 'css', 'js', 'fonts', 'images', 'templates', 'stylus-sprite-build'],
+        ['bower-scripts', 'sync', 'css', 'js', 'fonts', 'images', 'templates', 'stylus-sprite-build'],
         'watch'
     );
+
 });
 
-gulp.task('build', ['bower-files', 'css', 'js', 'fonts', 'images', 'templates', 'stylus-sprite-build']);
+gulp.task('build', ['bower-scripts', 'css', 'js', 'fonts', 'images', 'templates', 'stylus-sprite-build']);

@@ -145,6 +145,7 @@ propel:
     section_id: { phpName: SectionId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: setting_section, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
     key: { phpName: Key, type: VARCHAR, size: '255', required: true }
     title: { phpName: Title, type: VARCHAR, size: '255', required: true }
+    multiresult: { phpName: Multiresult, type: BOOLEAN, size: '1', sqlType: 'tinyint(1) unsigned', required: true, defaultValue: false }
     position: { phpName: Position, type: INTEGER, size: '10', required: true }
     visible: { phpName: Visible, type: BOOLEAN, size: '1', sqlType: 'tinyint(1) unsigned', required: true, defaultValue: true }
     _indexes: { visible: [visible], position: [position], section_id: [section_id], key: [key] }
@@ -169,6 +170,8 @@ propel:
     _attributes: { phpName: SettingResult, idMethod: native }
     id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
     setting_id: { phpName: SettingId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: setting, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    position: { phpName: Position, type: INTEGER, required: true }
+    visible: { phpName: Visible, type: BOOLEAN, size: '1', sqlType: 'tinyint(1) unsigned', required: true, defaultValue: true }
     _indexes: { setting_id: [setting_id] }
   setting_section:
     _attributes: { phpName: SettingSection, idMethod: native }
@@ -183,9 +186,12 @@ propel:
     id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
     result_id: { phpName: ResultId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
     field_id: { phpName: FieldId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: setting_field, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    image_id: { phpName: ImageId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: image, foreignReference: id, onDelete: 'SET NULL', onUpdate: CASCADE }
+    file_id: { phpName: FileId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: file, foreignReference: id, onDelete: 'SET NULL', onUpdate: CASCADE }
+    gallery_id: { phpName: GalleryId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: gallery, foreignReference: id, onDelete: 'SET NULL', onUpdate: CASCADE }
     option_id: { phpName: OptionId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: setting_option, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
     text: { phpName: Text, type: LONGVARCHAR, required: true }
-    _indexes: { field_id: [field_id], option_id: [option_id] }
+    _indexes: { field_id: [field_id], option_id: [option_id], image_id: [image_id], file_id: [file_id], gallery_id: [gallery_id] }
   user:
     _attributes: { phpName: User, idMethod: native }
     id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
