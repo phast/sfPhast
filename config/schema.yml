@@ -184,7 +184,7 @@ propel:
   setting_value:
     _attributes: { phpName: SettingValue, idMethod: native }
     id: { phpName: Id, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', primaryKey: true, autoIncrement: true, required: true }
-    result_id: { phpName: ResultId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true }
+    result_id: { phpName: ResultId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: setting_result, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
     field_id: { phpName: FieldId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: true, foreignTable: setting_field, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
     image_id: { phpName: ImageId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: image, foreignReference: id, onDelete: 'SET NULL', onUpdate: CASCADE }
     file_id: { phpName: FileId, type: INTEGER, size: '10', sqlType: 'int(10) unsigned', required: false, foreignTable: file, foreignReference: id, onDelete: 'SET NULL', onUpdate: CASCADE }
