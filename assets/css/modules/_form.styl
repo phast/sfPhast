@@ -1,0 +1,43 @@
+form,
+.form {
+   div.error-handler {
+      position absolute !important
+      bottom 10px
+   }
+   div.error {
+      position absolute
+      z-index 1
+      color #e75f5f
+      box-sizing border-box
+      text-align left
+      background-color rgba(white, .9)
+      cursor text
+      white-space nowrap
+      border-radius 4px
+      &.static {
+         position: relative;
+         margin-top: 7px;
+         font-size: 100%
+         background none
+      }
+      &.error-handler {
+         cursor pointer
+         bottom -18px
+      }
+   }
+   label {
+      display block
+   }
+}
+.form-input {
+   display block
+   margin-bottom 1.5em
+   &-label {
+      display block
+      margin-bottom .35em
+   }
+   &-field {
+      position relative
+      display block
+   }
+}

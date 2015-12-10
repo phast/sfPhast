@@ -1,0 +1,19 @@
+.body {
+   overflow auto
+   overflow-y scroll
+   height 100%
+   min-width ($block-width)
+   &-wrapper {
+      overflow hidden
+      position relative
+      min-height 100%
+      margin auto
+   }
+   &-content {
+      margin-top $header-height
+      margin-bottom $footer-height
+      &-wrapper {
+         position relative
+      }
+   }
+}

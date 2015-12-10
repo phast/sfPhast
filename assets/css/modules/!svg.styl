@@ -1,0 +1,57 @@
+svg(name, size = 16px, color = #fff, align = null, targetColor = #fff) {
+   // Ищем объект с данными svg
+   $image = lookup('$svg-'+name)
+
+   // Если нашли картинку
+   if ( $image ) {
+      // Получаем заданную нами ширину и высоту
+      // size = str-split(''+size+'', ' ')
+      $width = convert(''+size+'')
+      $height = unit(round(($width * $image['height']) / $image['width']), 'px')
+      // height = convert(!size[1] ? size[0] : size[1]) // Если нету высоты, то приравниваем к ширине
+
+      if ( align ) {
+         horizontal = align[0]
+         vertical = align[1] ? align[1] : align[0]
+         position absolute if !@position
+         if horizontal is center {
+            margin-left round($width / -2)
+            left 50%
+         } else if (horizontal is left) {
+            left 0
+         } else if (horizontal is right) {
+            right 0
+         }
+
+         if (vertical is center) {
+            margin-top round($height / -2)
+            top 50%
+         } else if (vertical is top) {
+            top 0
+         } else if (vertical is bottom) {
+            bottom 0
+         }
+      }
+
+      $bg = str-to-base64(str-replace($image['icon'], targetColor, color))
+      _cache = '$svg_bg-'+name+'--'+str-replace(color, '#', '')+'_'+unit(size, '')
+
+      width $width
+      height $height
+
+      +cache(_cache) {
+         background url('data:image/svg+xml;base64,'$bg) 0 0 no-repeat
+         background-size auto 100%
+      }
+
+   } else {
+      // Иначе ошибка
+      error('\n\n\n Нету такого svg `'+name+'` \n\n')
+   }
+}
+
+$svg-check = {
+   width: '332.466',
+   height: '258.876',
+   icon: '<svg xmlns="http://www.w3.org/2000/svg" width="332.466" height="258.876" viewBox="0 0 332.466 258.876"><path fill="#fff" d="M329.177 40.345L292.123 3.29c-4.387-4.387-11.496-4.387-15.883 0L121.88 157.65 56.23 92c-4.388-4.386-11.498-4.386-15.884 0L3.29 129.057c-4.386 4.387-4.386 11.496 0 15.883l110.65 110.644c2.19 2.195 5.066 3.293 7.94 3.293s5.75-1.098 7.942-3.293L329.177 56.227c2.105-2.105 3.29-4.964 3.29-7.94s-1.184-5.837-3.29-7.942zm0 0"/></svg>'
+}

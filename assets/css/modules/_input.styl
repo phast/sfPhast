@@ -1,0 +1,62 @@
+$inputs-padding = .2em .75em .3em
+
+input:-webkit-autofill {
+   color $color-main !important
+   background-color transparent !important
+}
+
+input,
+textarea {
+   +placeholder() {
+      padding $inputs-padding
+      padding-right 0
+      padding-left 0
+      opacity 1
+      color inherit
+      font-weight 300
+      line-height 1
+   }
+}
+
+input[type=text] {
+   -webkit-appearance none
+   transition all .2s ease-in-out
+   box-sizing border-box
+   width 100%
+   padding $inputs-padding
+   border-radius 0
+   border 1px solid $color-main
+   box-shadow none
+   background #fff
+   color $color-main
+   font-size 14px
+   &:focus {
+      border-color $color-main
+   }
+}
+
+input[type='number'],
+input[type='email'],
+input[type='tel'],
+input[type='search'],
+input[type='url'],
+input[type=password],
+textarea {
+   @extend input[type=text]
+}
+
+input[type='number']:focus,
+input[type='email']:focus,
+input[type='tel']:focus,
+input[type='search']:focus,
+input[type='url']:focus,
+input[type=password]:focus,
+textarea:focus {
+   @extend input[type=text]:focus
+}
+textarea {
+   padding-top .25em
+   padding-bottom @padding-top
+   resize vertical
+   line-height 18px
+}

@@ -20,6 +20,7 @@ thumbs.db
 /web/js/
 /web/css/
 /web/images/
+/web/sprites/
 /web/fonts/
 /source/etc/*.styl
 /*.bat

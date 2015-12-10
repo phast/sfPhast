@@ -4,15 +4,17 @@
 default:
   http_metas:
     content-type: text/html
-    x-ua-compatible: ie=edge
+    x-ua-compatible: 'ie=edge'
 
   metas:
     viewport: width=device-width, initial-scale=1.0
 
   stylesheets:
+    - vendor.css
     - common.css
 
   javascripts:
+    - vendor.js
     - common.js
 
 

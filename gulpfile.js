@@ -1,157 +1,273 @@
 var gulp = require('gulp'),
+    gulpif = require('gulp-if'),
     stylus = require('gulp-stylus'),
+    stylusUtils = require('gulp-stylus/node_modules/stylus').utils,
     spritesmith = require('gulp.spritesmith'),
     csso = require('gulp-csso'),
-    imagemin = require('gulp-imagemin'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat'),
     runSequence = require('run-sequence').use(gulp),
+    streamqueue = require('streamqueue'),
     bower = require('main-bower-files'),
     twig = require('gulp-twig'),
     browserSync,
     nib = require('nib'),
     phast = require('stylus-phast'),
-    merge = require('gulp-merge'),
+    merge = require('merge-stream'),
     path = require('path'),
-    fs = require('fs');
+    ts = require('gulp-typescript'),
+    fs = require('fs'),
+    through = require('through');
 
-gulp.task('templates', function() {
-    var stream = gulp.src('./source/twig/*.twig')
-        .pipe(twig({
-            data: JSON.parse(fs.readFileSync('./source/etc/twig.json'))
-        }))
-        .on('error', console.log)
-        .pipe(gulp.dest('./web'));
+var optimize = false,
+    spritesStorage;
 
-    if(browserSync)
-        stream.pipe(browserSync.reload({stream: true}));
-		
-	return stream;
+/**
+ * @task css
+ * Run tasks [css:sprite, css:main] sequentially
+ */
+gulp.task('css', function(callback){
+    runSequence('css:sprites', 'css:main', callback);
 });
 
-gulp.task('bower-scripts', function(){
-    return gulp.src(bower({
-            includeDev: true,
-            filter: function (path) {
-                var ext = path.split('\\').pop().split('.').pop();
-                if (ext == 'js') return true;
-            }
-        }))
-        .pipe(concat('vendor.js'))
-        .pipe(gulp.dest('./web/js'));
-});
-
-gulp.task('stylus', function() {
-    var stream = gulp.src('./source/stylus/*.styl')
-        .pipe(stylus({use: phast()}))
-        .on('error', console.log)
+/**
+ * @task css:main
+ * Generate /web/*.css
+ */
+gulp.task('css:main', function(callback){
+    var stream = gulp.src('./assets/css/*.styl')
+        .pipe(stylus({use: [phast(), function(stylus){
+            stylus.define('$sprites-timestamp', (new Date).getTime());
+            stylus.define('$sprites', stylusUtils.coerceObject(spritesStorage, true));
+        }]}))
+        .on('error', function(error){
+            console.log(error.message);
+            callback();
+        })
+        .pipe(gulpif(optimize, csso()))
         .pipe(gulp.dest('./web/css'));
 
-    if(browserSync)
+    if(browserSync){
         stream.pipe(browserSync.reload({stream: true}));
-		
-	return stream;
-});
-
-gulp.task('stylus-sprite', function() {
-    var data;
-    data = gulp.src('./source/sprite/**/*.png').pipe(spritesmith({
-        imgName: 'sprite.png',
-        cssName: 'sprite.styl',
-        cssFormat: 'stylus',
-        algorithm: 'binary-tree',
-        cssTemplate: function(data) {
-            var item, template, timestamp, _i, _len, _ref;
-            timestamp = (new Date).getTime();
-            template = '$sprite-timestamp = ' + timestamp + '\n';
-            template += '$sprites = {}\n';
-            _ref = data.items;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                item = _ref[_i];
-                template += '$sprite-' + item.name + ' = ' + item.px.offset_x + ' ' + item.px.offset_y + ' ' + item.px.width + ' ' + item.px.height + '\n';
-                template += '$sprites[\''+item.name+'\'] = $sprite-' + item.name + '\n';
-            }
-            return template;
-        }
-    }));
-    data.img.pipe(gulp.dest('./web/images'));
-    return data.css.pipe(gulp.dest('./source/etc'));
-});
-
-gulp.task('stylus-sprite-build', function() {
-    runSequence('stylus-sprite', 'stylus');
-
-});
-
-gulp.task('js', function() {
-    var dir = './source/js',
-        dest = './web/js';
-
-    var stream = fs
-        .readdirSync(dir)
-        .filter(function(file){return fs.statSync(path.join(dir, file)).isDirectory();})
-        .map(function(folder) {
-            return gulp.src(path.join(dir, folder, '/*.js'))
-                .pipe(concat(folder + '.js'))
-                .pipe(gulp.dest(dest))
-    });
-
-    stream = merge(stream, gulp.src(dir + '/*.js').pipe(concat('common.js')).pipe(gulp.dest(dest)));
-
-    if(browserSync)
-        stream.pipe(browserSync.reload({stream: true}));
+    }
 
     return stream;
 });
 
-gulp.task('css', function() {
-    var merged = merge(gulp.src('./source/css/**/*.css'), gulp.src(
-        bower({
-            includeDev: true,
-            filter: function (path) {
-                var ext = path.split('\\').pop().split('.').pop();
-                if (ext == 'css') return true;
-            }
+
+/**
+ * @task css:sprites
+ * Generate /web/sprites/*.png
+ */
+gulp.task('css:sprites', function(callback){
+    var dir = './assets/sprites',
+        stream;
+
+    spritesStorage = {};
+
+    if(!fs.existsSync(dir)){
+        return callback();
+    }
+
+    stream = fs.readdirSync(dir)
+        .filter(function(file){
+            return fs.statSync(path.join(dir, file)).isDirectory();
         })
+        .map(function(folder, i){
+            var data = gulp.src(path.join(dir, folder, '/*.png')).pipe(spritesmith({
+                imgName: folder + '.png',
+                cssName: folder,
+                cssFormat: 'json',
+                algorithm: 'binary-tree'
+            }));
+
+            data.img.pipe(gulp.dest('./web/sprites'));
+            return data.css;
+        });
+
+
+    if(!stream.length){
+        return callback();
+    }
+
+    stream = merge(stream);
+    stream.pipe(through(
+        function(file){
+            spritesStorage[file.path] = JSON.parse(file.contents.toString());
+        }
     ));
-    merged.pipe(concat('vendor.css')).pipe(gulp.dest('./web/css'));
 
-    return merged;
-});
-
-gulp.task('fonts', function() {
-    return gulp.src('./source/fonts/**/*').pipe(gulp.dest('./web/fonts'));
-});
-
-gulp.task('images', function() {
-    return gulp.src('./source/images/**/*').pipe(gulp.dest('./web/images'));
+    return stream;
 });
 
 
-gulp.task('watch', function(){
-    gulp.watch('./source/sprite/*', ['stylus-sprite-build']);
-    gulp.watch('./source/stylus/**/*.styl', ['stylus']);
-    gulp.watch('./source/twig/**/*.twig', ['templates']);
-    gulp.watch('./source/etc/twig.json', ['templates']);
-    gulp.watch('./source/js/**/*', ['js']);
-    gulp.watch('./source/fonts/**/*', ['fonts']);
-    gulp.watch('./source/images/**/*', ['images']);
-    gulp.watch('./source/css/**/*.css', ['css']);
+/**
+ * @task css:vendor
+ * Generate /web/vendor.css
+ */
+gulp.task('css:vendor', function(){
+    var stream = gulp.src('./assets/css/vendor/*.css');
+
+    if(fs.existsSync('./bower.json')){
+        stream = streamqueue(
+            {objectMode: true},
+            gulp.src(
+                bower({
+                    includeDev: true,
+                    filter: '**/*.css'
+                })
+            ),
+            stream
+        );
+    }
+
+    stream.pipe(concat('vendor.css')).pipe(gulp.dest('./web/css'));
+
+    return stream;
 });
 
-gulp.task('sync', function(){
-    browserSync({proxy: 'localhost', open: false});
-});
 
+/**
+ * @task js
+ * Generate /web/js/*.js
+ */
+gulp.task('js', function(callback){
+    var dir = './assets/js',
+        dest = './web/js',
+        stream;
 
-gulp.task('default', function() {
-    browserSync = require('browser-sync');
+    if(!fs.existsSync(dir)){
+        return callback();
+    }
 
-    runSequence(
-        ['bower-scripts', 'sync', 'css', 'js', 'fonts', 'images', 'templates', 'stylus-sprite-build'],
-        'watch'
+    stream = fs
+        .readdirSync(dir)
+        .filter(function(file){
+            return fs.statSync(path.join(dir, file)).isDirectory() && file != 'vendor';
+        })
+        .map(function(folder){
+            return merge(gulp.src(path.join(dir, folder, '/*.js')), gulp.src(path.join(dir, folder, '/*.ts')).pipe(ts({noImplicitAny: true})).js)
+                .pipe(concat(folder + '.js'))
+                .pipe(gulpif(optimize, uglify()))
+                .pipe(gulp.dest(dest));
+        });
+
+    stream = merge(
+        stream,
+        merge(gulp.src(dir + '/*.js'), gulp.src(dir + '/*.ts').pipe(ts({noImplicitAny: true})).js)
+            .pipe(concat('common.js'))
+            .pipe(gulpif(optimize, uglify()))
+            .pipe(gulp.dest(dest))
     );
 
+    if(browserSync){
+        stream.pipe(browserSync.reload({stream: true}));
+    }
+
+    return stream;
 });
 
-gulp.task('build', ['bower-scripts', 'css', 'js', 'fonts', 'images', 'templates', 'stylus-sprite-build']);
+
+/**
+ * @task js:vendor
+ * Generate /web/js/vendor.js
+ */
+gulp.task('js:vendor', function(){
+    var stream = gulp.src('./assets/js/vendor/**/*.js');
+
+    if(fs.existsSync('./bower.json')){
+        stream = streamqueue(
+            {objectMode: true},
+            gulp.src(bower({includeDev: true, filter: '**/*.js'})),
+            stream
+        );
+    }
+
+    stream
+        .pipe(concat('vendor.js'))
+        .pipe(gulpif(optimize, uglify()))
+        .pipe(gulp.dest('./web/js'));
+
+    if(browserSync){
+        stream.pipe(browserSync.reload({stream: true}));
+    }
+
+    return stream;
+});
+
+
+/**
+ * @task fonts
+ * Copy font files to /web/fonts/*
+ */
+gulp.task('fonts', function(){
+    return gulp.src('./assets/fonts/**/*').pipe(gulp.dest('./web/fonts'));
+});
+
+
+/**
+ * @task images
+ * Copy image files to /web/images/*
+ */
+gulp.task('images', function(){
+    return gulp.src('./assets/images/**/*').pipe(gulp.dest('./web/images'));
+});
+
+
+/**
+ * @task html
+ * Generate /web/*.html
+ */
+gulp.task('html', function(callback){
+    if(!fs.existsSync('./assets/html')){
+        return callback();
+    }
+
+    var stream = gulp.src('./assets/html/*.twig')
+        .pipe(twig({data: JSON.parse(fs.readFileSync('./assets/html/data.json'))}))
+        .on('error', console.log)
+        .pipe(gulp.dest('./web'));
+
+    if(browserSync){
+        stream.pipe(browserSync.reload({stream: true}));
+    }
+
+    return stream;
+});
+
+/**
+ * @task sync
+ */
+gulp.task('sync', function(){
+    browserSync = require('browser-sync');
+    browserSync({proxy: path.basename(__dirname), open: false, notify: false, ghostMode: false});
+});
+
+/**
+ * @task watch
+ */
+gulp.task('watch', ['sync'], function(){
+    gulp.watch('./assets/css/**/*.styl', ['css:main']);
+    gulp.watch('./assets/html/**/*.twig', ['html']);
+    gulp.watch('./assets/css/vendor/*.css', ['css:vendor']);
+    gulp.watch(['./assets/js/**/*.js', './assets/js/**/*.ts', '!./assets/js/vendor/**/*.js'], ['js']);
+    gulp.watch('./assets/js/vendor/**/*.js', ['js:vendor']);
+    gulp.watch('./assets/fonts/**/*', ['fonts']);
+    gulp.watch('./assets/images/**/*', ['images']);
+});
+
+
+gulp.task('default', function(){
+    runSequence(
+        ['html', 'css', 'css:vendor', 'js', 'js:vendor', 'fonts', 'images'],
+        'watch'
+    );
+});
+
+gulp.task('build', function(){
+    optimize = true;
+    runSequence(
+        ['css', 'css:vendor', 'js', 'js:vendor', 'fonts', 'images']
+    );
+});
+

@@ -1,5 +1,5 @@
 {
-  "name": "phast",
+  "name": "creonit",
   "version": "0.0.0",
   "authors": [],
   "license": "MIT",
@@ -11,6 +11,15 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~1.11"
+    "arcticModal": "komunyako/arcticModal#dev",
+    "jquery": "~1.11",
+    "jquery-form": "~3.46.0"
+  },
+  "overrides": {
+	"jquery.inputmask": {
+ 	  "main": [
+		"./dist/jquery.inputmask.bundle.js"
+		]
+	  }
   }
 }

@@ -1,0 +1,115 @@
+[modal-template] {
+   display none
+}
+.arcticmodal-overlay,
+.arcticmodal-container {
+   transform translateZ(0)
+   position fixed
+   left 0
+   top 0
+   right 0
+   bottom 0
+   z-index 400
+}
+.arcticmodal-container {
+   overflow-y scroll
+   margin 0
+   padding 0
+   border 0
+   border-collapse collapse
+}
+*:first-child + html .arcticmodal-container {
+   height 100%
+}
+
+.arcticmodal-container_i {
+   height 100%
+   margin 0 auto
+}
+.arcticmodal-container_i2 {
+   vertical-align middle !important
+   margin 0 !important
+   padding 10px !important
+   border 0 !important
+   background 0 !important
+   text-align center !important
+}
+.arcticmodal-overlay {
+   background-color rgba(black, .7) !important
+   opacity 1 !important
+}
+
+.modal-box {
+   box-sizing border-box
+   position relative
+   display none
+   background-color #fff
+   text-align left
+   .arcticmodal-container & {
+      display inline-block
+   }
+
+   &-notice{
+      margin-bottom 17px
+      margin-top -10px
+   }
+
+   h2{
+      font-size 16px
+      margin-bottom 1.5em
+      color $color-dgrey
+   }
+
+   p:last-child {
+      margin-bottom 0
+   }
+
+   &-buttons {
+      margin-top 2em
+   }
+   &-buttons.mod-center {
+      text-align center
+   }
+   &-title {
+      font-weight bold
+      font-size 25px
+      text-align center
+      margin-bottom 40px
+      margin-top -40px
+   }
+   &-close {
+      position absolute
+      top 0
+      right 0
+      size 30px
+      cursor pointer
+      &:before {
+         content ''
+         position absolute
+         spritus('modal-close', center)
+      }
+      +hover() {
+      }
+   }
+}
+
+.modal-template {
+   display none
+}
+.modal-box-content {
+   padding 30px
+}
+
+
+.modal {
+   max-width 600px
+   &.mod-wide {
+      max-width $block-max-width
+   }
+   &-title {
+      @extend $h2
+      &:last-child {
+         margin-bottom 0
+      }
+   }
+}
